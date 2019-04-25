@@ -203,7 +203,7 @@ export default class Form extends React.Component {
           id={this.props.submitButtonId}
           color={this.props.buttonColor}
           onClick={() => this.updateModel()}
-          disabled={!this.state.isValid}
+          disabled={false}
         >
           {this.props.submitLabel}
         </Button>

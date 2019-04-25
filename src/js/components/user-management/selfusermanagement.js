@@ -72,7 +72,7 @@ export default class SelfUserManagement extends React.Component {
           onSubmit={userdata => this._editSubmit(userdata)}
           handleCancel={() => this.handleEmail()}
           submitLabel="Save"
-          showButtons={this.state.editEmail}
+          showButtons={true}
           buttonColor="secondary"
           submitButtonId="submit_email"
           uniqueId={this.state.emailFormId}
@@ -103,7 +103,7 @@ export default class SelfUserManagement extends React.Component {
           submitLabel="Save"
           submitButtonId="submit_pass"
           buttonColor="secondary"
-          showButtons={this.state.editPass}
+          showButtons={true}
           className="margin-top"
         >
           {this.state.editPass ? (

@@ -8,8 +8,6 @@ import AppActions from '../../actions/app-actions';
 import AppStore from '../../stores/app-store';
 
 import Form from '../common/forms/form';
-import TextInput from '../common/forms/textinput';
-import PasswordInput from '../common/forms/passwordinput';
 import FormCheckbox from '../common/forms/formcheckbox';
 
 import { preformatWithRequestID } from '../../helpers';
@@ -54,10 +52,8 @@ export default class Login extends React.Component {
   _handleLogin(formData) {
     var self = this;
 
-    if (!formData.hasOwnProperty('email')) {
-      return;
-    }
-    return AppActions.loginUser(formData)
+    
+    return AppActions.loginUserSSO(formData)
       .then(token => {
         var options = {};
         if (!formData.noExpiry) {
@@ -110,10 +106,11 @@ export default class Login extends React.Component {
             submitLabel={buttonLabel}
             submitButtonId="login_button"
           >
-            <TextInput hint="Your email" label="Your email" id="email" required={true} validations="isLength:1,isEmail" />
-            <PasswordInput className="margin-bottom-small" id="password" label="Password" required={true} />
+            <TextInput hint="Your email" label="Your email" id="email"  />
+            <PasswordInput className="margin-bottom-small" id="password" label="Password"  />
             <FormCheckbox id="noExpiry" label="Stay logged in" checked={noExpiry === 'true'} />
           </Form>
+
 
           <div className="clear" />
           {isHosted ? (

@@ -219,6 +219,15 @@ const AppActions = {
         }
       }),
 
+  loginUserSSO: userData =>
+    UsersApi.postLogin(`${useradmApiUrl}/auth/login`, userData)
+      .then(res => res.text)
+      .catch(err => {
+        if (err.error.code && err.error.code !== 200) {
+          return Promise.reject(err);
+        }
+      }),
+      
   getUserList: () => UsersApi.get(`${useradmApiUrl}/users`),
 
   getUser: id => UsersApi.get(`${useradmApiUrl}/users/${id}`),
