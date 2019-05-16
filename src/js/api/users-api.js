@@ -45,6 +45,42 @@ const Api = {
         });
     });
   },
+  getLogin: (url) => {
+    console.log('getLogin SSO:' + url);
+    return new Promise((resolve, reject) => {
+      request
+        .get(url)
+        .end((err, res) => {
+          var errorResponse;
+          if (err || !res.ok ) {
+            var status = err.status === 'undefined'? 401 : err.status;
+            errorResponse = {
+              text: err.response ? JSON.parse(err.response.text) : err,
+              code: status
+            };
+            console.log('error status:' + status);
+            reject({ error: errorResponse, res: res });
+          } else {
+            console.log('result status:' + res.status);
+            console.log('result type:' +  res.type);
+
+            if (res.type !== 'application/jwt') {
+              errorResponse = {
+                text: 'Not authenticated, response must be jwt',
+                code: 401
+              };
+              reject({ error:errorResponse, res: res });
+            }
+            var response = {
+              text: res.text,
+              code: res.status
+            };
+            resolve(response);
+          }
+        });
+    });
+  },
+  
   post: (url, userData) => {
     return new Promise((resolve, reject) => {
       var token = cookie.load('JWT');

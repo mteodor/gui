@@ -7,7 +7,7 @@ import GeneralApi from '../api/general-api';
 import UsersApi from '../api/users-api';
 import parse from 'parse-link-header';
 
-var rootUrl = 'https://localhost:443';
+var rootUrl = 'http://ui.mender.com';
 const apiUrl = `${rootUrl}/api/management/v1`;
 const apiUrlV2 = `${rootUrl}/api/management/v2`;
 const deploymentsApiUrl = `${apiUrl}/deployments`;
@@ -267,6 +267,9 @@ const AppActions = {
       .then(res => res.text)
       .catch(err => {
         if (err.error.code && err.error.code !== 200) {
+          if ( err.error.code > 300 ){
+            console.log('redirection occured')
+          }
           return Promise.reject(err);
         }
       }),

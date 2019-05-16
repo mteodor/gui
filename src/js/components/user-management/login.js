@@ -27,13 +27,14 @@ export default class Login extends React.Component {
 
   componentWillMount() {
     AppStore.changeListener(this._onChange.bind(this));
-    console.log('component will mount');
-    this._handleLoginSSO();
+ 
   }
 
   componentDidMount() {
     clearAllRetryTimers();
     AppActions.setCurrentUser(null);
+    console.log('authentication try');
+    this._handleLoginSSO();
   }
 
   componentWillUnmount() {
@@ -58,6 +59,7 @@ export default class Login extends React.Component {
 
     return AppActions.loginUserSSO()
       .then(token => {
+        console.log('received token:' +  token );
         var options = {maxAge:3600};
         // maxAge for cookie maybe to be set from id_token 
 
@@ -74,6 +76,7 @@ export default class Login extends React.Component {
       })
       .catch(err => {
         var errMsg = 'There was a problem logging in';
+        console.log(errMsg);
         if (err.res.body && Object.keys(err.res.body).includes('error')) {
           // if error message, check for "unauthorized"
           errMsg = err.res.body['error'] === 'unauthorized' ? 'The username or password is incorrect' : `${errMsg}: ${err.res.body['error']}`;
