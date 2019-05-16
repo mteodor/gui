@@ -27,6 +27,8 @@ export default class Login extends React.Component {
 
   componentWillMount() {
     AppStore.changeListener(this._onChange.bind(this));
+    console.log('component will mount');
+    AppActions.loginUser();
   }
 
   componentDidMount() {
@@ -51,21 +53,17 @@ export default class Login extends React.Component {
     this.setState(this._getState());
   }
 
-  _handleLogin(formData) {
+  _handleLoginSSO() {
     var self = this;
 
-    if (!formData.hasOwnProperty('email')) {
-      return;
-    }
-    return AppActions.loginUser(formData)
+ 
+    return AppActions.loginUser()
       .then(token => {
-        var options = {};
-        if (!formData.noExpiry) {
-          options = { maxAge: 900 };
-        }
+        var options = {maxAge:3600};
+        // maxAge for cookie maybe to be set from id_token 
 
         // set no expiry as cookie to remember checkbox value
-        cookie.save('noExpiry', formData.noExpiry.toString());
+        cookie.save('noExpiry', 'true');
 
         // save token as cookie
         // set maxAge if noexpiry checkbox not checked

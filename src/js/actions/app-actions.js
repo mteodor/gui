@@ -211,7 +211,7 @@ const AppActions = {
     User management 
   */
   loginUser: userData =>
-    UsersApi.postLogin(`${useradmApiUrl}/auth/login`, userData)
+    UsersApi.postLogin(`${useradmApiUrl}/auth/ssologin`, userData)
       .then(res => res.text)
       .catch(err => {
         if (err.error.code && err.error.code !== 200) {
@@ -219,6 +219,19 @@ const AppActions = {
         }
       }),
 
+    /* 
+    User management 
+  */
+ loginUserSSO: () =>
+  UsersApi.getLogin(`${useradmApiUrl}/auth/ssologin`)
+   .then(res => res.text)
+   .catch(err => {
+     if (err.error.code && err.error.code !== 200) {
+       return Promise.reject(err);
+     }
+   }),
+  
+  
   getUserList: () => UsersApi.get(`${useradmApiUrl}/users`),
 
   getUser: id => UsersApi.get(`${useradmApiUrl}/users/${id}`),

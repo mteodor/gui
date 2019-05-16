@@ -9,6 +9,10 @@ module.exports = {
   optimization: {
     minimize: false
   },
+  devServer: {
+    contentBase: path.join(__dirname, "../dist/"),
+    port: 9000
+  },
   module: {
     rules: [
       {
@@ -80,4 +84,5 @@ module.exports = {
     new CopyPlugin([{ from: './src/assets/img', to: 'assets/img' }]),
     new CopyPlugin([{ from: './src/*.*', to: '[name].[ext]', test: /(.*)\.(css|ico)$/ }])
   ]
+  
 };

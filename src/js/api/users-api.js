@@ -45,6 +45,29 @@ const Api = {
         });
     });
   },
+  getLogin: (url) => {
+    return new Promise((resolve, reject) => {
+      request
+        .post(url)
+        .auth(userData.email, userData.password)
+        .set('Content-Type', 'application/jwt')
+        .end((err, res) => {
+          if (err || !res.ok) {
+            var errorResponse = {
+              text: err.response ? JSON.parse(err.response.text) : err,
+              code: err.status
+            };
+            reject({ error: errorResponse, res: res });
+          } else {
+            var response = {
+              text: res.text,
+              code: res.status
+            };
+            resolve(response);
+          }
+        });
+    });
+  },
   post: (url, userData) => {
     return new Promise((resolve, reject) => {
       var token = cookie.load('JWT');
