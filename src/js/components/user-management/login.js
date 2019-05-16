@@ -28,7 +28,7 @@ export default class Login extends React.Component {
   componentWillMount() {
     AppStore.changeListener(this._onChange.bind(this));
     console.log('component will mount');
-    AppActions.loginUser();
+    this._handleLoginSSO();
   }
 
   componentDidMount() {
@@ -56,8 +56,7 @@ export default class Login extends React.Component {
   _handleLoginSSO() {
     var self = this;
 
- 
-    return AppActions.loginUser()
+    return AppActions.loginUserSSO()
       .then(token => {
         var options = {maxAge:3600};
         // maxAge for cookie maybe to be set from id_token 
