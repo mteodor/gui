@@ -54,6 +54,41 @@ export default class Login extends React.Component {
     this.setState(this._getState());
   }
 
+  _handleLogin(formData) {
+    var self = this;
+
+    if (!formData.hasOwnProperty('email')) {
+      return;
+    }
+    return AppActions.loginUser(formData)
+      .then(token => {
+        var options = {};
+        if (!formData.noExpiry) {
+          options = { maxAge: 900 };
+        }
+
+        // set no expiry as cookie to remember checkbox value
+        cookie.save('noExpiry', formData.noExpiry.toString());
+
+        // save token as cookie
+        // set maxAge if noexpiry checkbox not checked
+        cookie.save('JWT', token, options);
+
+        // logged in, so redirect
+        self.setState({ redirectToReferrer: true });
+        return AppActions.setSnackbar('');
+      })
+      .catch(err => {
+        var errMsg = 'There was a problem logging in';
+        if (err.res.body && Object.keys(err.res.body).includes('error')) {
+          // if error message, check for "unauthorized"
+          errMsg = err.res.body['error'] === 'unauthorized' ? 'The username or password is incorrect' : `${errMsg}: ${err.res.body['error']}`;
+        }
+        AppActions.setSnackbar(preformatWithRequestID(err.res, errMsg), null, 'Copy to clipboard');
+      });
+  }
+
+
   _handleLoginSSO() {
     var self = this;
 
