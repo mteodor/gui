@@ -15,7 +15,8 @@ const deviceAuthV2 = `${apiUrlV2}/devauth`;
 const inventoryApiUrl = `${apiUrl}/inventory`;
 const useradmApiUrl = `${apiUrl}/useradm`;
 const tenantadmUrl = `${apiUrl}/tenantadm`;
-const hostedLinks = 'https://s3.amazonaws.com/hosted-mender-artifacts-onboarding/';
+const hostedLinks =
+	'https://s3.amazonaws.com/hosted-mender-artifacts-onboarding/';
 
 // default per page until pagination and counting integrated
 const default_per_page = 20;
@@ -23,8 +24,8 @@ const default_page = 1;
 
 const AppActions = {
   /*
-   * Device inventory functions
-   */
+	 * Device inventory functions
+	 */
   selectGroup: group => {
     AppDispatcher.handleViewAction({
       actionType: AppConstants.SELECT_GROUP,
@@ -33,11 +34,15 @@ const AppActions = {
   },
 
   addDeviceToGroup: (group, device) => {
-    return DevicesApi.put(`${inventoryApiUrl}/devices/${device}/group`, { group });
+    return DevicesApi.put(`${inventoryApiUrl}/devices/${device}/group`, {
+      group
+    });
   },
 
   removeDeviceFromGroup: (device, group) => {
-    return DevicesApi.delete(`${inventoryApiUrl}/devices/${device}/group/${group}`);
+    return DevicesApi.delete(
+      `${inventoryApiUrl}/devices/${device}/group/${group}`
+    );
   },
 
   addGroup: (group, idx) => {
@@ -58,9 +63,15 @@ const AppActions = {
       return Promise.resolve(res.body);
     }),
 
-  getGroupDevices: (group, page = default_page, per_page = default_per_page) => {
+  getGroupDevices: (
+    group,
+    page = default_page,
+    per_page = default_per_page
+  ) => {
     var forGroup = group ? `&group=${group}` : '&has_group=false';
-    return DevicesApi.get(`${inventoryApiUrl}/devices?per_page=${per_page}&page=${page}${forGroup}`);
+    return DevicesApi.get(
+      `${inventoryApiUrl}/devices?per_page=${per_page}&page=${page}${forGroup}`
+    );
   },
 
   setGroupDevices: devices => {
@@ -76,16 +87,25 @@ const AppActions = {
       attrs: attrs
     }),
 
-  getDeviceById: id => DevicesApi.get(`${inventoryApiUrl}/devices/${id}`).then(res => res.body),
+  getDeviceById: id =>
+    DevicesApi.get(`${inventoryApiUrl}/devices/${id}`).then(res => res.body),
 
-  getDevices: (page = default_page, per_page = default_per_page, search_term) => {
+  getDevices: (
+    page = default_page,
+    per_page = default_per_page,
+    search_term
+  ) => {
     // get devices from inventory
     var search = search_term ? `&${search_term}` : '';
-    return DevicesApi.get(`${inventoryApiUrl}/devices?per_page=${per_page}&page=${page}${search}`).then(res => res.body);
+    return DevicesApi.get(
+      `${inventoryApiUrl}/devices?per_page=${per_page}&page=${page}${search}`
+    ).then(res => res.body);
   },
   getAllDevices: () => {
     const getAllDevices = (per_page = 200, page = 1, devices = []) =>
-      DevicesApi.get(`${inventoryApiUrl}/devices?per_page=${per_page}&page=${page}`).then(res => {
+      DevicesApi.get(
+        `${inventoryApiUrl}/devices?per_page=${per_page}&page=${page}`
+      ).then(res => {
         var links = parse(res.headers['link']);
         devices.push(...res.body);
         if (links.next) {
@@ -97,12 +117,16 @@ const AppActions = {
   },
   getNumberOfDevicesInGroup: function(group) {
     var forGroup = group ? `&group=${group}` : '&has_group=false';
-    return DevicesApi.get(`${inventoryApiUrl}/devices?per_page=1&page=1${forGroup}`).then(res => Promise.resolve(Number(res.headers['x-total-count'])));
+    return DevicesApi.get(
+      `${inventoryApiUrl}/devices?per_page=1&page=1${forGroup}`
+    ).then(res => Promise.resolve(Number(res.headers['x-total-count'])));
   },
   getAllDevicesInGroup: function(group) {
     var forGroup = group ? `&group=${group}` : '&has_group=false';
     const getDeviceCount = (per_page = 200, page = 1, devices = []) =>
-      DevicesApi.get(`${inventoryApiUrl}/devices?per_page=${per_page}&page=${page}${forGroup}`).then(function(res) {
+      DevicesApi.get(
+        `${inventoryApiUrl}/devices?per_page=${per_page}&page=${page}${forGroup}`
+      ).then(function(res) {
         var links = parse(res.headers['link']);
         devices.push(...res.body);
         if (links.next) {
@@ -120,40 +144,42 @@ const AppActions = {
   getDeviceCount: status => {
     var filter = status ? `?status=${status}` : '';
 
-    return DevicesApi.get(`${deviceAuthV2}/devices/count${filter}`).then(res => {
-      switch (status) {
-      case 'pending':
-        AppDispatcher.handleViewAction({
-          actionType: AppConstants.SET_PENDING_DEVICES,
-          count: res.body.count
-        });
-        break;
-      case 'accepted':
-        AppDispatcher.handleViewAction({
-          actionType: AppConstants.SET_ACCEPTED_DEVICES,
-          count: res.body.count
-        });
-        break;
-      case 'rejected':
-        AppDispatcher.handleViewAction({
-          actionType: AppConstants.SET_REJECTED_DEVICES,
-          count: res.body.count
-        });
-        break;
-      case 'preauthorized':
-        AppDispatcher.handleViewAction({
-          actionType: AppConstants.SET_PREAUTH_DEVICES,
-          count: res.body.count
-        });
-        break;
-      default:
-        AppDispatcher.handleViewAction({
-          actionType: AppConstants.SET_TOTAL_DEVICES,
-          count: res.body.count
-        });
+    return DevicesApi.get(`${deviceAuthV2}/devices/count${filter}`).then(
+      res => {
+        switch (status) {
+        case 'pending':
+          AppDispatcher.handleViewAction({
+            actionType: AppConstants.SET_PENDING_DEVICES,
+            count: res.body.count
+          });
+          break;
+        case 'accepted':
+          AppDispatcher.handleViewAction({
+            actionType: AppConstants.SET_ACCEPTED_DEVICES,
+            count: res.body.count
+          });
+          break;
+        case 'rejected':
+          AppDispatcher.handleViewAction({
+            actionType: AppConstants.SET_REJECTED_DEVICES,
+            count: res.body.count
+          });
+          break;
+        case 'preauthorized':
+          AppDispatcher.handleViewAction({
+            actionType: AppConstants.SET_PREAUTH_DEVICES,
+            count: res.body.count
+          });
+          break;
+        default:
+          AppDispatcher.handleViewAction({
+            actionType: AppConstants.SET_TOTAL_DEVICES,
+            count: res.body.count
+          });
+        }
+        return Promise.resolve(res.body.count);
       }
-      return Promise.resolve(res.body.count);
-    });
+    );
   },
 
   getDeviceLimit: () =>
@@ -165,14 +191,22 @@ const AppActions = {
       return Promise.resolve(res.body.limit);
     }),
 
-  getDevicesByStatus: (status, page = default_page, per_page = default_per_page) => {
+  getDevicesByStatus: (
+    status,
+    page = default_page,
+    per_page = default_per_page
+  ) => {
     var dev_status = status ? `status=${status}` : '';
-    return DevicesApi.get(`${deviceAuthV2}/devices?${dev_status}&per_page=${per_page}&page=${page}`).then(response => response.body);
+    return DevicesApi.get(
+      `${deviceAuthV2}/devices?${dev_status}&per_page=${per_page}&page=${page}`
+    ).then(response => response.body);
   },
 
   getAllDevicesByStatus: status => {
     const getAllDevices = (per_page = 200, page = 1, devices = []) =>
-      DevicesApi.get(`${deviceAuthV2}/devices?status=${status}&per_page=${per_page}&page=${page}`).then(res => {
+      DevicesApi.get(
+        `${deviceAuthV2}/devices?status=${status}&per_page=${per_page}&page=${page}`
+      ).then(res => {
         var links = parse(res.headers['link']);
         devices.push(...res.body);
         if (links.next) {
@@ -183,11 +217,17 @@ const AppActions = {
     return getAllDevices();
   },
 
-  getDeviceAuth: id => DevicesApi.get(`${deviceAuthV2}/devices/${id}`).then(res => res.body),
+  getDeviceAuth: id =>
+    DevicesApi.get(`${deviceAuthV2}/devices/${id}`).then(res => res.body),
 
-  updateDeviceAuth: (device_id, auth_id, status) => DevicesApi.put(`${deviceAuthV2}/devices/${device_id}/auth/${auth_id}/status`, { status: status }),
+  updateDeviceAuth: (device_id, auth_id, status) =>
+    DevicesApi.put(
+      `${deviceAuthV2}/devices/${device_id}/auth/${auth_id}/status`,
+      { status: status }
+    ),
 
-  deleteAuthset: (device_id, auth_id) => DevicesApi.delete(`${deviceAuthV2}/devices/${device_id}/auth/${auth_id}`),
+  deleteAuthset: (device_id, auth_id) =>
+    DevicesApi.delete(`${deviceAuthV2}/devices/${device_id}/auth/${auth_id}`),
 
   preauthDevice: authset => {
     console.log(authset);
@@ -219,19 +259,18 @@ const AppActions = {
         }
       }),
 
-    /* 
+  /* 
     User management 
   */
- loginUserSSO: () =>
-  UsersApi.getLogin(`${useradmApiUrl}/auth/ssologin`)
-   .then(res => res.text)
-   .catch(err => {
-     if (err.error.code && err.error.code !== 200) {
-       return Promise.reject(err);
-     }
-   }),
-  
-  
+  loginUserSSO: () =>
+    UsersApi.getLogin(`${useradmApiUrl}/auth/ssologin`)
+      .then(res => res.text)
+      .catch(err => {
+        if (err.error.code && err.error.code !== 200) {
+          return Promise.reject(err);
+        }
+      }),
+
   getUserList: () => UsersApi.get(`${useradmApiUrl}/users`),
 
   getUser: id => UsersApi.get(`${useradmApiUrl}/users/${id}`),
@@ -240,7 +279,8 @@ const AppActions = {
 
   removeUser: userId => UsersApi.delete(`${useradmApiUrl}/users/${userId}`),
 
-  editUser: (userId, userData) => UsersApi.put(`${useradmApiUrl}/users/${userId}`, userData),
+  editUser: (userId, userData) =>
+    UsersApi.put(`${useradmApiUrl}/users/${userId}`, userData),
 
   setCurrentUser: user =>
     AppDispatcher.handleViewAction({
@@ -260,7 +300,10 @@ const AppActions = {
       return Promise.resolve(res.body);
     }),
 
-  getHostedLinks: id => GeneralApi.getNoauth(`${hostedLinks}${id}/links.json`).then(res => JSON.parse(res.text)),
+  getHostedLinks: id =>
+    GeneralApi.getNoauth(`${hostedLinks}${id}/links.json`).then(res =>
+      JSON.parse(res.text)
+    ),
 
   /* 
     Global settings 
@@ -302,14 +345,19 @@ const AppActions = {
       return Promise.resolve(artifacts);
     }),
 
-  getArtifactUrl: id => ArtifactsApi.get(`${deploymentsApiUrl}/artifacts/${id}/download`),
+  getArtifactUrl: id =>
+    ArtifactsApi.get(`${deploymentsApiUrl}/artifacts/${id}/download`),
 
   uploadArtifact: (meta, file, progress) => {
     var formData = new FormData();
     formData.append('size', file.size);
     formData.append('description', meta.description);
     formData.append('artifact', file);
-    return ArtifactsApi.postFormData(`${deploymentsApiUrl}/artifacts`, formData, e => progress(e.percent));
+    return ArtifactsApi.postFormData(
+      `${deploymentsApiUrl}/artifacts`,
+      formData,
+      e => progress(e.percent)
+    );
   },
 
   setUploadInProgress: bool =>
@@ -318,9 +366,11 @@ const AppActions = {
       inprogress: bool
     }),
 
-  editArtifact: (id, body) => ArtifactsApi.putJSON(`${deploymentsApiUrl}/artifacts/${id}`, body),
+  editArtifact: (id, body) =>
+    ArtifactsApi.putJSON(`${deploymentsApiUrl}/artifacts/${id}`, body),
 
-  removeArtifact: id => ArtifactsApi.delete(`${deploymentsApiUrl}/artifacts/${id}`),
+  removeArtifact: id =>
+    ArtifactsApi.delete(`${deploymentsApiUrl}/artifacts/${id}`),
 
   setDeploymentArtifact: artifact =>
     AppDispatcher.handleViewAction({
@@ -330,18 +380,22 @@ const AppActions = {
 
   /* Releases */
   getReleases: () =>
-    ArtifactsApi.get(`${deploymentsApiUrl}/deployments/releases`).then(releases => {
-      AppDispatcher.handleViewAction({
-        actionType: AppConstants.RECEIVE_RELEASES,
-        releases
-      });
-      return Promise.resolve(releases);
-    }),
+    ArtifactsApi.get(`${deploymentsApiUrl}/deployments/releases`).then(
+      releases => {
+        AppDispatcher.handleViewAction({
+          actionType: AppConstants.RECEIVE_RELEASES,
+          releases
+        });
+        return Promise.resolve(releases);
+      }
+    ),
 
   /*Deployments */
   // all deployments
   getDeployments: (page = default_page, per_page = default_per_page) =>
-    DeploymentsApi.get(`${deploymentsApiUrl}/deployments?page=${page}&per_page=${per_page}`).then(res => {
+    DeploymentsApi.get(
+      `${deploymentsApiUrl}/deployments?page=${page}&per_page=${per_page}`
+    ).then(res => {
       var deployments = res.body;
       AppDispatcher.handleViewAction({
         actionType: AppConstants.RECEIVE_DEPLOYMENTS,
@@ -350,8 +404,13 @@ const AppActions = {
       return Promise.resolve(deployments);
     }),
 
-  getDeploymentsInProgress: (page = default_page, per_page = default_per_page) =>
-    DeploymentsApi.get(`${deploymentsApiUrl}/deployments?status=inprogress&page=${page}&per_page=${per_page}`).then(res => {
+  getDeploymentsInProgress: (
+    page = default_page,
+    per_page = default_per_page
+  ) =>
+    DeploymentsApi.get(
+      `${deploymentsApiUrl}/deployments?status=inprogress&page=${page}&per_page=${per_page}`
+    ).then(res => {
       var deployments = res.body;
       AppDispatcher.handleViewAction({
         actionType: AppConstants.RECEIVE_ACTIVE_DEPLOYMENTS,
@@ -360,7 +419,13 @@ const AppActions = {
       return Promise.resolve(deployments);
     }),
 
-  getPastDeployments: (page = default_page, per_page = default_per_page, startDate, endDate, group) => {
+  getPastDeployments: (
+    page = default_page,
+    per_page = default_per_page,
+    startDate,
+    endDate,
+    group
+  ) => {
     var created_after = startDate ? `&created_after=${startDate}` : '';
     var created_before = endDate ? `&created_before=${endDate}` : '';
     var search = group ? `&search=${group}` : '';
@@ -377,7 +442,9 @@ const AppActions = {
     });
   },
   getPendingDeployments: (page = default_page, per_page = default_per_page) =>
-    DeploymentsApi.get(`${deploymentsApiUrl}/deployments?status=pending&page=${page}&per_page=${per_page}`).then(res => {
+    DeploymentsApi.get(
+      `${deploymentsApiUrl}/deployments?status=pending&page=${page}&per_page=${per_page}`
+    ).then(res => {
       var deployments = res.body;
       AppDispatcher.handleViewAction({
         actionType: AppConstants.RECEIVE_PENDING_DEPLOYMENTS,
@@ -391,17 +458,17 @@ const AppActions = {
     var created_before = endDate ? `&created_before=${endDate}` : '';
     var search = group ? `&search=${group}` : '';
     const DeploymentCount = (page = 1, per_page = 500, count = 0) =>
-      DeploymentsApi.get(`${deploymentsApiUrl}/deployments?status=${status}&per_page=${per_page}&page=${page}${created_after}${created_before}${search}`).then(
-        res => {
-          var links = parse(res.headers['link']);
-          count += res.body.length;
-          if (links.next) {
-            page++;
-            return DeploymentCount(page, per_page, count);
-          }
-          return Promise.resolve(count);
+      DeploymentsApi.get(
+        `${deploymentsApiUrl}/deployments?status=${status}&per_page=${per_page}&page=${page}${created_after}${created_before}${search}`
+      ).then(res => {
+        var links = parse(res.headers['link']);
+        count += res.body.length;
+        if (links.next) {
+          page++;
+          return DeploymentCount(page, per_page, count);
         }
-      );
+        return Promise.resolve(count);
+      });
 
     return DeploymentCount().then(count => {
       if (status === 'inprogress') {
@@ -413,17 +480,36 @@ const AppActions = {
       return Promise.resolve(count);
     });
   },
-  createDeployment: deployment => DeploymentsApi.post(`${deploymentsApiUrl}/deployments`, deployment).then(data => data.location),
+  createDeployment: deployment =>
+    DeploymentsApi.post(`${deploymentsApiUrl}/deployments`, deployment).then(
+      data => data.location
+    ),
 
-  getSingleDeployment: id => DeploymentsApi.get(`${deploymentsApiUrl}/deployments/${id}`).then(res => res.body),
+  getSingleDeployment: id =>
+    DeploymentsApi.get(`${deploymentsApiUrl}/deployments/${id}`).then(
+      res => res.body
+    ),
 
-  getSingleDeploymentStats: id => DeploymentsApi.get(`${deploymentsApiUrl}/deployments/${id}/statistics`).then(res => res.body),
+  getSingleDeploymentStats: id =>
+    DeploymentsApi.get(
+      `${deploymentsApiUrl}/deployments/${id}/statistics`
+    ).then(res => res.body),
 
-  getSingleDeploymentDevices: id => DeploymentsApi.get(`${deploymentsApiUrl}/deployments/${id}/devices`).then(res => res.body),
+  getSingleDeploymentDevices: id =>
+    DeploymentsApi.get(`${deploymentsApiUrl}/deployments/${id}/devices`).then(
+      res => res.body
+    ),
 
-  getDeviceLog: (deploymentId, deviceId) => DeploymentsApi.getText(`${deploymentsApiUrl}/deployments/${deploymentId}/devices/${deviceId}/log`),
+  getDeviceLog: (deploymentId, deviceId) =>
+    DeploymentsApi.getText(
+      `${deploymentsApiUrl}/deployments/${deploymentId}/devices/${deviceId}/log`
+    ),
 
-  abortDeployment: deploymentId => DeploymentsApi.put(`${deploymentsApiUrl}/deployments/${deploymentId}/status`, { status: 'aborted' }),
+  abortDeployment: deploymentId =>
+    DeploymentsApi.put(
+      `${deploymentsApiUrl}/deployments/${deploymentId}/status`,
+      { status: 'aborted' }
+    ),
 
   sortTable: (table, column, direction) =>
     AppDispatcher.handleViewAction({
