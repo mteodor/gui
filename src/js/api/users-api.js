@@ -22,7 +22,7 @@ const Api = {
         });
     });
   },
-  postLogin: (url, userData) => { 
+  postLogin: (url, userData) => {
     return new Promise((resolve, reject) => {
       request
         .post(url)
@@ -52,25 +52,30 @@ const Api = {
         .get(url)
         .end((err, res) => {
           var errorResponse;
-          if (err || !res.ok ) {
-            var status = err.status === 'undefined'? 401 : err.status;
+          if (err || !res.ok) {
+            var status = err.status === 'undefined' ? 401 : err.status;
             errorResponse = {
               text: err.response ? JSON.parse(err.response.text) : err,
               code: status
             };
             console.log('error status:' + status);
             reject({ error: errorResponse, res: res });
+          }
+          
+          if (res.status === 302) {
+            errorResponse = {
+              text: 'Not authenticated, try again',
+              code: 302
+            };
+            reject({ error: errorResponse, res: res });
+          }
+          else if (res.type !== 'application/jwt') {
+            errorResponse = {
+              text: 'Not authenticated, response must be jwt',
+              code: 401
+            };
+            reject({ error: errorResponse, res: res });
           } else {
-            console.log('result status:' + res.status);
-            console.log('result type:' +  res.type);
-
-            if (res.type !== 'application/jwt') {
-              errorResponse = {
-                text: 'Not authenticated, response must be jwt',
-                code: 401
-              };
-              reject({ error:errorResponse, res: res });
-            }
             var response = {
               text: res.text,
               code: res.status
@@ -80,7 +85,7 @@ const Api = {
         });
     });
   },
-  
+
   post: (url, userData) => {
     return new Promise((resolve, reject) => {
       var token = cookie.load('JWT');

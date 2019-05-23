@@ -36,6 +36,7 @@
     "react-dropzone": "^8.0.4",
     "react-height": "^3.0.0",
     "react-idle-timer": "^4.2.3",
+    "react-iframe": "^1.8.0",
     "react-linkify": "^0.2.2",
     "react-motion": "^0.5.2",
     "react-router-dom": "^4.3.1",
@@ -47,7 +48,7 @@
     "superagent-auth-bearer": "0.0.1",
     "superagent-use": "^0.1.0",
     "validator": "^8.2.0",
-    "webpack-dev-server": "^3.3.1",
+    "webpack-dev-server": "^3.4.1",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
@@ -93,7 +94,7 @@
     "lint-fix": "eslint --fix src",
     "build": "webpack --mode production ./src/js/main.js",
     "watch": "webpack --watch --mode development ./src/js/main.js",
-    "serve": "webpack-dev-server ./src/js/main.js --host ui.mender.com"
+    "serve": "webpack-dev-server ./src/js/main.js --host localhost --disable-host-check"
   },
   "author": "Michael Clelland",
   "license": "ISC",

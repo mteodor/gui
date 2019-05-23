@@ -7,7 +7,7 @@ import GeneralApi from '../api/general-api';
 import UsersApi from '../api/users-api';
 import parse from 'parse-link-header';
 
-var rootUrl = 'http://ui.mender.com';
+var rootUrl = 'http://mender.solidsense.tk';
 const apiUrl = `${rootUrl}/api/management/v1`;
 const apiUrlV2 = `${rootUrl}/api/management/v2`;
 const deploymentsApiUrl = `${apiUrl}/deployments`;
@@ -16,7 +16,7 @@ const inventoryApiUrl = `${apiUrl}/inventory`;
 const useradmApiUrl = `${apiUrl}/useradm`;
 const tenantadmUrl = `${apiUrl}/tenantadm`;
 const hostedLinks =
-	'https://s3.amazonaws.com/hosted-mender-artifacts-onboarding/';
+  'https://s3.amazonaws.com/hosted-mender-artifacts-onboarding/';
 
 // default per page until pagination and counting integrated
 const default_per_page = 20;
@@ -115,18 +115,18 @@ const AppActions = {
       });
     return getAllDevices();
   },
-  getNumberOfDevicesInGroup: function(group) {
+  getNumberOfDevicesInGroup: function (group) {
     var forGroup = group ? `&group=${group}` : '&has_group=false';
     return DevicesApi.get(
       `${inventoryApiUrl}/devices?per_page=1&page=1${forGroup}`
     ).then(res => Promise.resolve(Number(res.headers['x-total-count'])));
   },
-  getAllDevicesInGroup: function(group) {
+  getAllDevicesInGroup: function (group) {
     var forGroup = group ? `&group=${group}` : '&has_group=false';
     const getDeviceCount = (per_page = 200, page = 1, devices = []) =>
       DevicesApi.get(
         `${inventoryApiUrl}/devices?per_page=${per_page}&page=${page}${forGroup}`
-      ).then(function(res) {
+      ).then(function (res) {
         var links = parse(res.headers['link']);
         devices.push(...res.body);
         if (links.next) {
@@ -147,35 +147,35 @@ const AppActions = {
     return DevicesApi.get(`${deviceAuthV2}/devices/count${filter}`).then(
       res => {
         switch (status) {
-        case 'pending':
-          AppDispatcher.handleViewAction({
-            actionType: AppConstants.SET_PENDING_DEVICES,
-            count: res.body.count
-          });
-          break;
-        case 'accepted':
-          AppDispatcher.handleViewAction({
-            actionType: AppConstants.SET_ACCEPTED_DEVICES,
-            count: res.body.count
-          });
-          break;
-        case 'rejected':
-          AppDispatcher.handleViewAction({
-            actionType: AppConstants.SET_REJECTED_DEVICES,
-            count: res.body.count
-          });
-          break;
-        case 'preauthorized':
-          AppDispatcher.handleViewAction({
-            actionType: AppConstants.SET_PREAUTH_DEVICES,
-            count: res.body.count
-          });
-          break;
-        default:
-          AppDispatcher.handleViewAction({
-            actionType: AppConstants.SET_TOTAL_DEVICES,
-            count: res.body.count
-          });
+          case 'pending':
+            AppDispatcher.handleViewAction({
+              actionType: AppConstants.SET_PENDING_DEVICES,
+              count: res.body.count
+            });
+            break;
+          case 'accepted':
+            AppDispatcher.handleViewAction({
+              actionType: AppConstants.SET_ACCEPTED_DEVICES,
+              count: res.body.count
+            });
+            break;
+          case 'rejected':
+            AppDispatcher.handleViewAction({
+              actionType: AppConstants.SET_REJECTED_DEVICES,
+              count: res.body.count
+            });
+            break;
+          case 'preauthorized':
+            AppDispatcher.handleViewAction({
+              actionType: AppConstants.SET_PREAUTH_DEVICES,
+              count: res.body.count
+            });
+            break;
+          default:
+            AppDispatcher.handleViewAction({
+              actionType: AppConstants.SET_TOTAL_DEVICES,
+              count: res.body.count
+            });
         }
         return Promise.resolve(res.body.count);
       }
@@ -262,13 +262,23 @@ const AppActions = {
   /* 
     User management 
   */
+ 
   loginUserSSO: () =>
     UsersApi.getLogin(`${useradmApiUrl}/auth/ssologin`)
       .then(res => res.text)
       .catch(err => {
         if (err.error.code && err.error.code !== 200) {
-          if ( err.error.code > 300 ){
+          if (err.error.code > 300) {
             console.log('redirection occured')
+            UsersApi.getLogin(`${useradmApiUrl}/auth/ssologin`)
+              .then(res => res.text)
+              .catch(err => {
+                if (err.error.code && err.error.code !== 200) {
+                  if (err.error.code > 300)
+                    console.log('second redirection occured')
+                  return Promise.reject(err);
+                }
+              })
           }
           return Promise.reject(err);
         }
