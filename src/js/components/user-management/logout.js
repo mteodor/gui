@@ -23,13 +23,13 @@ export default class Login extends React.Component {
  
 
           <div className="clear" />
-            <div className="flexbox margin-top" style={{ color: 'rgba(0, 0, 0, 0.3)', justifyContent: 'center' }}>
-              <span>
-                <a style={{ marginLeft: '4px' }} href="/ui/#/login" target="_self">
+          <div className="flexbox margin-top" style={{ color: 'rgba(0, 0, 0, 0.3)', justifyContent: 'center' }}>
+            <span>
+              <a style={{ marginLeft: '4px' }} href="/ui/#/login" target="_self">
                   Login
-                </a>
-              </span>
-            </div>
+              </a>
+            </span>
+          </div>
         </div>
       </div>
     );

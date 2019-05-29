@@ -147,35 +147,35 @@ const AppActions = {
     return DevicesApi.get(`${deviceAuthV2}/devices/count${filter}`).then(
       res => {
         switch (status) {
-          case 'pending':
-            AppDispatcher.handleViewAction({
-              actionType: AppConstants.SET_PENDING_DEVICES,
-              count: res.body.count
-            });
-            break;
-          case 'accepted':
-            AppDispatcher.handleViewAction({
-              actionType: AppConstants.SET_ACCEPTED_DEVICES,
-              count: res.body.count
-            });
-            break;
-          case 'rejected':
-            AppDispatcher.handleViewAction({
-              actionType: AppConstants.SET_REJECTED_DEVICES,
-              count: res.body.count
-            });
-            break;
-          case 'preauthorized':
-            AppDispatcher.handleViewAction({
-              actionType: AppConstants.SET_PREAUTH_DEVICES,
-              count: res.body.count
-            });
-            break;
-          default:
-            AppDispatcher.handleViewAction({
-              actionType: AppConstants.SET_TOTAL_DEVICES,
-              count: res.body.count
-            });
+        case 'pending':
+          AppDispatcher.handleViewAction({
+            actionType: AppConstants.SET_PENDING_DEVICES,
+            count: res.body.count
+          });
+          break;
+        case 'accepted':
+          AppDispatcher.handleViewAction({
+            actionType: AppConstants.SET_ACCEPTED_DEVICES,
+            count: res.body.count
+          });
+          break;
+        case 'rejected':
+          AppDispatcher.handleViewAction({
+            actionType: AppConstants.SET_REJECTED_DEVICES,
+            count: res.body.count
+          });
+          break;
+        case 'preauthorized':
+          AppDispatcher.handleViewAction({
+            actionType: AppConstants.SET_PREAUTH_DEVICES,
+            count: res.body.count
+          });
+          break;
+        default:
+          AppDispatcher.handleViewAction({
+            actionType: AppConstants.SET_TOTAL_DEVICES,
+            count: res.body.count
+          });
         }
         return Promise.resolve(res.body.count);
       }

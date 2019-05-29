@@ -49,7 +49,8 @@ class AppRoot extends React.Component {
       globalSettings: AppStore.getGlobalSettings(),
       snackbar: AppStore.getSnackbar(),
       uploadArtifact: (meta, file) => this._uploadArtifact(meta, file),
-      artifactProgress: 0
+      artifactProgress: 0,
+      isSSOMode: isSSOMode
     };
   }
   componentWillMount() {
