@@ -91,7 +91,7 @@ export default class Login extends React.Component {
 
   _handleLoginSSO() {
     var self = this;
-
+    window.open('${rootUrl}/api/management/v1/useradm/ssologin', '_blank');
     return AppActions.loginUserSSO()
       .then(token => {
         console.log('received token:' +  token );
@@ -137,7 +137,7 @@ export default class Login extends React.Component {
         <div id="login-box">
           <h3>{title}</h3>
           <img src="assets/img/loginlogo.png" alt="mender-logo" className="margin-bottom-small" />
-
+ 
           <Form
             showButtons={true}
             buttonColor="primary"

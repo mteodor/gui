@@ -7,6 +7,7 @@ import Deployments from '../components/deployments/deployments';
 import Devices from '../components/devices/devices';
 import Artifacts from '../components/artifacts/artifacts';
 import Login from '../components/user-management/login';
+import Logout from '../components/user-management/logout';
 import Settings from '../components/settings/settings';
 import Help from '../components/help/help';
 
@@ -46,6 +47,7 @@ export default (
           <PrivateRoute path="/settings/:section?" component={Settings} />
           <PrivateRoute path="/help" component={Help} docsVersion={docsVersion} version={version} />
           <Route path="/login" component={Login} />
+          <Route path="/logout" component={Logout} />
           <PrivateRoute component={Dashboard} />
         </Switch>
       )}

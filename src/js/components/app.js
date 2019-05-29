@@ -17,6 +17,7 @@ import AppActions from '../actions/app-actions';
 import { AppContext } from '../contexts/app-context';
 
 var isDemoMode = false;
+var isSSOMode = false;
 var _HostedAnnouncement = '';
 
 class AppRoot extends React.Component {

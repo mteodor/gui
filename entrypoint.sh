@@ -45,6 +45,11 @@ if [ ! -z "$ANNOUNCEMENT" ]; then
    	sed -i "s/var _HostedAnnouncement.*/var _HostedAnnouncement = '$ANNOUNCEMENT';/g" $MAINJS
 fi
 
+
+# isSSOMode switch for SSO
+if [ "$SSO" == "true" ]; then
+   sed -i "s/var isSSOMode.*/var isSSOMode = true;/g" $MAINJS
+
 # isDemoMode switch for Demo UI
 if [ "$DEMO" == "true" ]; then
    sed -i "s/var isDemoMode.*/var isDemoMode = true;/g" $MAINJS
