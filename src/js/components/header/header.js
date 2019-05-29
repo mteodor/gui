@@ -202,7 +202,8 @@ export default class Header extends React.Component {
     this.setState({ gettingUser: false });
     clearAllRetryTimers();
     cookie.remove('JWT');
-    this.context.router.history.push('/login');
+    //if modde sso else push login
+    this.context.router.history.push('/logout');
   }
   render() {
     const self = this;
