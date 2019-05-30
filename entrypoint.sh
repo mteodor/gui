@@ -49,6 +49,7 @@ fi
 # isSSOMode switch for SSO
 if [ "$SSO" == "true" ]; then
    sed -i "s/var isSSOMode.*/var isSSOMode = true;/g" $MAINJS
+fi
 
 # isDemoMode switch for Demo UI
 if [ "$DEMO" == "true" ]; then

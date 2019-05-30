@@ -91,7 +91,6 @@ export default class Login extends React.Component {
 
   _handleLoginSSO() {
     var self = this;
-    window.open('${rootUrl}/api/management/v1/useradm/ssologin', '_blank');
     return AppActions.loginUserSSO()
       .then(token => {
         console.log('received token:' +  token );
