@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import AppActions from '../../actions/app-actions';
 export default class Login extends React.Component {
   static contextTypes = {
     router: PropTypes.object,
@@ -11,18 +11,11 @@ export default class Login extends React.Component {
     super(props, context);
   }
 
-  componentWillMount() {
-    AppStore.changeListener(this._onChange.bind(this));
-  }
-  
   componentDidMount() {
-    clearAllRetryTimers();
     AppActions.setCurrentUser(null);
   }
 
   render() {
-    
-
     var title = 'Logged out';
     return (
       <div className="full-screen">

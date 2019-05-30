@@ -7,13 +7,16 @@ import Deployments from '../components/deployments/deployments';
 import Devices from '../components/devices/devices';
 import Artifacts from '../components/artifacts/artifacts';
 import Login from '../components/user-management/login';
+import LoginSSO from '../components/user-management/loginsso';
 import Logout from '../components/user-management/logout';
 import Settings from '../components/settings/settings';
 import Help from '../components/help/help';
 
 import { isLoggedIn } from '../auth';
 import { AppContext } from '../contexts/app-context';
-
+function isSSOMode(){
+  return isSSOMode;
+}
 const PrivateRoute = ({ component: Component, ...rest }) => {
   // if not logged in, redirect to login screen
   return (
@@ -23,12 +26,21 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         isLoggedIn() ? (
           <Component {...props} {...rest} />
         ) : (
-          <Redirect
-            to={{
-              pathname: '/login',
-              state: { from: props.location }
-            }}
-          />
+          isSSOMode() ? (
+            <Redirect
+              to={{
+                pathname: '/ssologin',
+                state: { from: props.location }
+              }}
+            />
+          )  : (
+            <Redirect
+              to={{
+                pathname: '/login',
+                state: { from: props.location }
+              }}
+            />
+          )
         )
       }
     />
@@ -48,6 +60,8 @@ export default (
           <PrivateRoute path="/help" component={Help} docsVersion={docsVersion} version={version} />
           <Route path="/login" component={Login} />
           <Route path="/logout" component={Logout} />
+          <Route path="/login" component={Login} />
+          <Route path="/loginsso" component={LoginSSO} />
           <PrivateRoute component={Dashboard} />
         </Switch>
       )}
