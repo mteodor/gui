@@ -143,6 +143,9 @@ export default class Login extends React.Component {
             onSubmit={formdata => this._handleLogin(formdata)}
             submitLabel={buttonLabel}
             submitButtonId="login_button"
+            ssoMode={true}
+            submitSSOLabel="SSO Login"
+            submitButtonSSOId="login_sso_button"
           >
             <TextInput hint="Your email" label="Your email" id="email" required={true} validations="isLength:1,isEmail" />
             <PasswordInput className="margin-bottom-small" id="password" label="Password" required={true} />

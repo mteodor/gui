@@ -84,7 +84,8 @@ export default class Header extends React.Component {
       multitenancy: AppStore.hasMultitenancy(),
       deviceLimit: AppStore.getDeviceLimit(),
       inProgress: AppStore.getNumberInProgress(),
-      globalSettings: AppStore.getGlobalSettings()
+      globalSettings: AppStore.getGlobalSettings(),
+      showHeader: true
     };
   }
   _onChange() {
@@ -199,10 +200,12 @@ export default class Header extends React.Component {
     this.setState({ anchorEl: null });
   };
   onLogoutClick() {
-    this.setState({ gettingUser: false });
+    //if mode sso showHeader=false
+    this.setState({ gettingUser: false, showHeader: false });
     clearAllRetryTimers();
     cookie.remove('JWT');
     //if modde sso else push login
+
     this.context.router.history.push('/logout');
   }
   render() {

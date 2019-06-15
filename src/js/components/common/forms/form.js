@@ -156,6 +156,7 @@ export default class Form extends React.Component {
   // All methods defined are bound to the component by React JS, so it is safe to use "this"
   // even though we did not bind it. We add the input component to our inputs map
   attachToForm(component) {
+    console.log("attaching component:" + component.props.id)
     this.inputs[component.props.id] = component;
     this.model[component.props.id] = component.state.value || component.state.checked;
 
@@ -166,8 +167,12 @@ export default class Form extends React.Component {
 
   // We want to remove the input component from the inputs map
   detachFromForm(component) {
+    console.log("dettaching component:" + component.props.id)
     delete this.inputs[component.props.id];
     delete this.model[component.props.id];
+  }
+  authenticateOnOIDC(){
+    window.open("http://mender.solidsense.tk/auth/realms/kapua/protocol/openid-connect/auth?scope=openid&response_type=code&client_id=console&redirect_uri=http://mender.solidsense.tk/ui/","_self")
   }
   updateModel() {
     Object.keys(this.inputs).forEach(name => {
@@ -207,6 +212,21 @@ export default class Form extends React.Component {
         >
           {this.props.submitLabel}
         </Button>
+
+
+        {this.props.ssoMode ? (
+          <Button
+            variant="contained"
+            key="submitSSO"
+            id={this.props.submitButtonSSOId}
+            color={this.props.buttonSSOColor}
+            onClick={() => this.authenticateOnOIDC()}
+            disabled={false}
+          >
+            {this.props.submitSSOLabel}
+          </Button>
+        ) : null}
+
       </div>
     ) : null;
 

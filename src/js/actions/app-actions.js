@@ -280,8 +280,8 @@ const AppActions = {
                 }
               })
           }
-          return Promise.reject(err);
         }
+        return Promise.reject(err);
       }),
 
   getUserList: () => UsersApi.get(`${useradmApiUrl}/users`),
